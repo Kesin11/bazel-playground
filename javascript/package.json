@@ -1,23 +1,17 @@
 {
-  "name": "bazel-playground",
-  "version": "0.0.1",
-  "description": "My first bazel playground project",
-  "private": true,
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kesin11/bazel-playground.git"
-  },
-  "author": "Kesin11",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Kesin11/bazel-playground/issues"
-  },
-  "homepage": "https://github.com/Kesin11/bazel-playground#readme",
-  "dependencies": {
-    "lodash": "^4.17.20"
-  }
+    "name": "javascript",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+        "@bazel/bazelisk": "latest",
+        "@bazel/ibazel": "latest",
+        "@bazel/buildifier": "latest"
+    },
+    "scripts": {
+        "build": "bazel build //...",
+        "test": "bazel test //..."
+    },
+    "dependencies": {
+        "lodash": "^4.17.20"
+    }
 }
