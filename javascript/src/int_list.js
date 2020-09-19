@@ -1,9 +1,7 @@
+const _ = require('lodash')
+
 const intList = (num) => {
-  const arr = []
-  for (let index = 0; index < num; index++) {
-    arr.push(index)
-  }
-  return arr
+  return _.range(1, num)
 }
 
 module.exports = {

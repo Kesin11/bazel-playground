@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Kesin11/bazel-playground/issues"
   },
-  "homepage": "https://github.com/Kesin11/bazel-playground#readme"
+  "homepage": "https://github.com/Kesin11/bazel-playground#readme",
+  "dependencies": {
+    "lodash": "^4.17.20"
+  }
 }
