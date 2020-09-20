@@ -1,4 +1,15 @@
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
+
+nodejs_test(
+  name = "index_test",
+  entry_point = "//:src/index.js",
+  data = [
+    "@npm//lodash",
+    "//:src/printer.js",
+    "//:src/int_list.js"
+  ],
+)
 
