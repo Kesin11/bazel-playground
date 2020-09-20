@@ -12,4 +12,11 @@ describe('printer', () => {
 
     expect(printer.count).toEqual(1)
   });
+
+  it('should count is 2 after call prints with length 2', () => {
+    const printer = new Printer()
+    printer.prints(['foo', 'bar'])
+
+    expect(printer.count).toEqual(2)
+  });
 });

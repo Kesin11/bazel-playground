@@ -11,6 +11,7 @@
     "scripts": {
         "build": "bazel build //...",
         "test": "bazel test //...",
+        "test:watch": "ibazel test //...",
         "test:debug": "bazel test -s --verbose_failures --sandbox_debug //..."
     },
     "dependencies": {
