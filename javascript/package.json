@@ -4,8 +4,9 @@
     "private": true,
     "devDependencies": {
         "@bazel/bazelisk": "latest",
+        "@bazel/buildifier": "latest",
         "@bazel/ibazel": "latest",
-        "@bazel/buildifier": "latest"
+        "jest": "^26.4.2"
     },
     "scripts": {
         "build": "bazel build //...",
