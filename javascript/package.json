@@ -6,6 +6,7 @@
         "@bazel/bazelisk": "latest",
         "@bazel/buildifier": "latest",
         "@bazel/ibazel": "latest",
+        "eslint": "^7.9.0",
         "jest": "^26.4.2"
     },
     "scripts": {

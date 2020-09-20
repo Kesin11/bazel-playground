@@ -3,6 +3,7 @@
 
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 load(":jest.bzl", "jest_test")
+load("@npm//eslint:index.bzl", "eslint_test")
 
 # index.jsを実行してステータスコードが0かどうかチェックするだけ
 nodejs_test(
@@ -13,6 +14,20 @@ nodejs_test(
     "src/printer.js",
     "src/int_list.js",
   ],
+)
+
+eslint_test(
+  name = "lint_src",
+  args = ["src"],
+  data = [".eslintrc.js"] + glob(["src/**/*.js"]),
+  size = "small",
+)
+
+eslint_test(
+  name = "lint_tests",
+  args = ["__tests__"],
+  data = [".eslintrc.js"] + glob(["__tests__/**/*.js"]),
+  size = "small",
 )
 
 jest_test(

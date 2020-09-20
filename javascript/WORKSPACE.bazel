@@ -9,6 +9,8 @@ workspace(
     # This lets Bazel use the same node_modules as other local tooling.
     managed_directories = {"@npm": ["node_modules"]},
 )
+# bazelがsandboxで使用するnode_modulesをローカルと共通にしている。docker volumeのマウントに近い
+# これによりbazelの中でnpm_installするとローカルのnode_modulesも更新される
 
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
@@ -28,3 +30,8 @@ npm_install(
     package_json = "//:package.json",
     package_lock_json = "//:package-lock.json",
 )
+
+# npm_installは、package.jsonかpackage-lock.jsonの更新を検知するとnpm_installを再実行する
+# その回では前回とパッケージのバージョンが異なるから（？）かLICENSEファイルが読み込めないというエラーになる
+# そこでパッケージのバージョンが更新されるからか、次回実行時は問題なく成功する
+# git cloneしたばかり、あるいはbazel cleanしてdist, bazel-outが存在しない場合は初回から問題なく成功する
