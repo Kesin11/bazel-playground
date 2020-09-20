@@ -5,4 +5,4 @@ My first bazel playground project
 - [x] install
 - [x] simple test
 - [x] jest
-- [ ] eslint
+- [x] eslint

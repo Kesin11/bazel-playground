@@ -17,17 +17,12 @@ nodejs_test(
 )
 
 eslint_test(
-  name = "lint_src",
-  args = ["src"],
-  data = [".eslintrc.js"] + glob(["src/**/*.js"]),
-  size = "small",
-)
-
-eslint_test(
-  name = "lint_tests",
-  args = ["__tests__"],
-  data = [".eslintrc.js"] + glob(["__tests__/**/*.js"]),
-  size = "small",
+  name = "lint",
+  args = ["src", "__tests__"],
+  data = [".eslintrc.js"] + glob(["src/**/*.js", "__tests__/**/*.js"]) + [
+    "@npm//eslint-plugin-jest",
+    "@npm//jest" # for eslint auto detect jest version
+  ],
 )
 
 jest_test(

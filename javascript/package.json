@@ -7,6 +7,7 @@
         "@bazel/buildifier": "latest",
         "@bazel/ibazel": "latest",
         "eslint": "^7.9.0",
+        "eslint-plugin-jest": "^24.0.2",
         "jest": "^26.4.2"
     },
     "scripts": {
