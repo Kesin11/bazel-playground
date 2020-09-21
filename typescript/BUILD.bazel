@@ -1,10 +1,8 @@
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
-# load(":jest.bzl", "jest_test")
-# load("@npm//eslint:index.bzl", "eslint_test")
+load(":jest.bzl", "jest_test")
 
 ts_library(
   name = "lib",
@@ -16,18 +14,35 @@ ts_library(
   ],
 )
 
-# eslint_test(
-#   name = "lint",
-#   args = ["src", "__tests__"],
-#   data = [".eslintrc.js"] + glob(["src/**/*.js", "__tests__/**/*.js"]) + [
-#     "@npm//eslint-plugin-jest",
-#     "@npm//jest" # for eslint auto detect jest version
-#   ],
-# )
+ts_library(
+  name = "test_lib",
+  srcs = glob(["__tests__/**/*.ts"]),
+  tsconfig = "tsconfig.json",
+  deps = [
+    ":lib",
+    "@npm//lodash",
+    "@npm//@types",
+  ],
+)
 
-# jest_test(
-#   name = "jest_test",
-#   srcs = glob(["__tests__/*.js"]),
-#   jest_config = "jest.config.js",
-#   deps = glob(["src/*.js"])
-# )
+# トランスパイルされた.d.ts, .jsのうち.jsだけを取り出す
+# output_groupはts_libraryの出力のうち、.jsだけを取り出すという意味になる
+# ref: https://bazelbuild.github.io/rules_nodejs/TypeScript.html#accessing-javascript-outputs
+# ref: https://github.com/bazelbuild/rules_typescript/blob/master/internal/common/compilation.bzl
+filegroup(
+    name = "lib_js",
+    srcs = [":lib"],
+    output_group = "es5_sources",
+)
+filegroup(
+    name = "test_lib_js",
+    srcs = [":test_lib"],
+    output_group = "es5_sources",
+)
+
+jest_test(
+  name = "jest_test",
+  srcs = [":test_lib_js"],
+  jest_config = "jest.config.js",
+  deps = [":lib_js"],
+)
