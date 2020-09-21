@@ -1,0 +1,33 @@
+# Add rules here to build your software
+# See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
+
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
+load("@npm//@bazel/typescript:index.bzl", "ts_library")
+# load(":jest.bzl", "jest_test")
+# load("@npm//eslint:index.bzl", "eslint_test")
+
+ts_library(
+  name = "lib",
+  srcs = glob(["src/**/*.ts"]),
+  tsconfig = "tsconfig.json",
+  deps = [
+    "@npm//lodash",
+    "@npm//@types/lodash",
+  ],
+)
+
+# eslint_test(
+#   name = "lint",
+#   args = ["src", "__tests__"],
+#   data = [".eslintrc.js"] + glob(["src/**/*.js", "__tests__/**/*.js"]) + [
+#     "@npm//eslint-plugin-jest",
+#     "@npm//jest" # for eslint auto detect jest version
+#   ],
+# )
+
+# jest_test(
+#   name = "jest_test",
+#   srcs = glob(["__tests__/*.js"]),
+#   jest_config = "jest.config.js",
+#   deps = glob(["src/*.js"])
+# )
