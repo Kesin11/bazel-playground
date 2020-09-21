@@ -1,4 +1,6 @@
-"jest_test wrapper"
+""" My jest_test wrapper
+ref: https://github.com/bazelbuild/rules_nodejs/blob/stable/examples/jest/jest.bzl
+"""
 
 load("@npm//jest:index.bzl", _jest_test = "jest_test")
 
@@ -10,6 +12,10 @@ def jest_test(name, srcs, deps, jest_config, **kwargs):
         "--ci",
     ]
     args.extend(["--config", "$(location %s)" % jest_config])
+    # 理由が分からなかったがjestはsandbox環境では__tests__の中にマッチするテストファイルが存在しないと判定してしまう
+    # --rootDirや--testMatchも試したが効果はなかった
+    # --runTestsByPathで1ファイルずつパスを渡す場合は正しく見つけることができる
+    # 配列のsrcsでループを回す必要があるのでdefで自前のjest_testを実装する必要がある
     for src in srcs:
         args.extend(["--runTestsByPath", "$(location %s)" % src])
 
