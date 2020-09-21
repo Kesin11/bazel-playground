@@ -1,0 +1,5 @@
+
+dist
+bazel-out
+node_modules
+ts_dist
