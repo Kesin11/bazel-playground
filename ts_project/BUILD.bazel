@@ -13,6 +13,9 @@ ts_project(
     "@npm//lodash",
     "@npm//@types/lodash",
   ],
+  # declarationやsouce_mapなどはtsconfig.jsonと一致しない場合はエラーになるので必ず合わせる
+  declaration = True,
+  source_map = True,
 )
 
 # index.jsを実行してステータスコードが0かどうかチェックするだけ
