@@ -3,7 +3,7 @@
 
 load("@npm//@bazel/typescript:index.bzl", "ts_project")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
-# load(":jest.bzl", "jest_test")
+load(":jest.bzl", "jest_test")
 
 ts_project(
   name = "lib",
@@ -27,5 +27,15 @@ nodejs_test(
   data = [
     "@npm//lodash",
     ":lib"
+  ],
+)
+
+jest_test(
+  name = "jest_test",
+  srcs = glob(["__tests__/**/*.test.ts"]),
+  jest_config = "jest.config.js",
+  deps = [
+    ":lib",
+    "@npm//ts-jest",
   ],
 )
