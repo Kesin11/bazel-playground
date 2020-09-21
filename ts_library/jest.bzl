@@ -11,8 +11,6 @@ def jest_test(name, srcs, deps, jest_config, **kwargs):
         "--no-watchman",
         "--ci",
     ]
-    # 理由が分からなかったがglobではなく、ts_libraryの出力を:test_lib_jsで渡した場合
-    # $(location)ではダメで$(locations)にする必要があるらしい
     args.extend(["--config", "$(location %s)" % jest_config])
     # ".."を付けないと以下のようなエラーになる
     # Cannot find module 'typescript/src/int_list' from '__tests__/int_list.test.js'

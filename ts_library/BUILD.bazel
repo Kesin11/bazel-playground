@@ -2,6 +2,7 @@
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
 load("@npm//@bazel/typescript:index.bzl", "ts_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
 load(":jest.bzl", "jest_test")
 
 ts_library(
@@ -14,13 +15,26 @@ ts_library(
   ],
 )
 
+# index.jsを実行してステータスコードが0かどうかチェックするだけ
+nodejs_test(
+  name = "index_test",
+  # ts_libraryはsrc/index.tsからsrc/index.jsが生成されることが分かっている
+  # ':'を省略したとしてもsrc/index.ts -> src/index.jsと解釈されてjsが実行される
+  entry_point = ":src/index.ts",
+  data = [
+    "@npm//lodash",
+    ":lib"
+  ],
+)
+
 ts_library(
   name = "test_lib",
   srcs = glob(["__tests__/**/*.ts"]),
   tsconfig = "tsconfig.json",
   deps = [
     ":lib",
-    "@npm//lodash",
+    # @typesだけにするとnode_modules/@types以下を全て使うという意味
+    # 関係の無い@typesの変更でも再ビルドが必要になるというデメリットはある
     "@npm//@types",
   ],
 )
@@ -29,11 +43,6 @@ ts_library(
 # output_groupはts_libraryの出力のうち、.jsだけを取り出すという意味になる
 # ref: https://bazelbuild.github.io/rules_nodejs/TypeScript.html#accessing-javascript-outputs
 # ref: https://github.com/bazelbuild/rules_typescript/blob/master/internal/common/compilation.bzl
-filegroup(
-    name = "lib_js",
-    srcs = [":lib"],
-    output_group = "es5_sources",
-)
 filegroup(
     name = "test_lib_js",
     srcs = [":test_lib"],
@@ -44,5 +53,5 @@ jest_test(
   name = "jest_test",
   srcs = [":test_lib_js"],
   jest_config = "jest.config.js",
-  deps = [":lib_js"],
+  deps = [":lib"],
 )
