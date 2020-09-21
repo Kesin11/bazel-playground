@@ -7,6 +7,16 @@ My first bazel playground project
 - [x] jest
 - [x] eslint
 
+## ts_library(typescript)
+- [x] install
+- [x] tsc
+- [x] jest
+
+## ts_project(typescript)
+- [ ] install
+- [ ] tsc
+- [ ] jest(ts-jest)
+
 
 # デバッグ時のメモ
 ## bazelコマンドの実行ログをファイルで見る
