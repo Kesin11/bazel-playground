@@ -1,0 +1,41 @@
+# Add rules here to build your software
+# See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
+
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
+load(":jest.bzl", "jest_test")
+
+ts_project(
+  name = "lib",
+  srcs = glob(["src/**/*.ts"]),
+  tsconfig = "tsconfig.json",
+  deps = [
+    "@npm//lodash",
+    "@npm//@types/lodash",
+  ],
+  # declarationやsouce_mapなどはtsconfig.jsonと一致しない場合はエラーになるので必ず合わせる
+  declaration = True,
+  source_map = True,
+)
+
+# index.jsを実行してステータスコードが0かどうかチェックするだけ
+nodejs_test(
+  name = "index_test",
+  # ts_projectはsrc/index.tsからsrc/index.jsが生成されることが分かっている
+  # ':'を省略したとしてもsrc/index.ts -> src/index.jsと解釈されてjsが実行される
+  entry_point = ":src/index.ts",
+  data = [
+    "@npm//lodash",
+    ":lib"
+  ],
+)
+
+jest_test(
+  name = "jest_test",
+  srcs = glob(["__tests__/**/*.test.ts"]),
+  jest_config = "jest.config.js",
+  deps = [
+    ":lib",
+    "@npm//ts-jest",
+  ],
+)

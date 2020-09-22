@@ -1,0 +1,37 @@
+# Bazel workspace created by @bazel/create 2.2.0
+
+# Declares that this directory is the root of a Bazel workspace.
+# See https://docs.bazel.build/versions/master/build-ref.html#workspace
+workspace(
+    # How this workspace would be referenced with absolute labels from another workspace
+    name = "typescript_ts_project",
+    # Map the @npm bazel workspace to the node_modules directory.
+    # This lets Bazel use the same node_modules as other local tooling.
+    managed_directories = {"@npm": ["node_modules"]},
+)
+# bazelがsandboxで使用するnode_modulesをローカルと共通にしている。docker volumeのマウントに近い
+# これによりbazelの中でnpm_installするとローカルのnode_modulesも更新される
+
+# Install the nodejs "bootstrap" package
+# This provides the basic tools for running and packaging nodejs programs in Bazel
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "build_bazel_rules_nodejs",
+    sha256 = "4952ef879704ab4ad6729a29007e7094aef213ea79e9f2e94cbe1c9a753e63ef",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/2.2.0/rules_nodejs-2.2.0.tar.gz"],
+)
+
+# The npm_install rule runs yarn anytime the package.json or package-lock.json file changes.
+# It also extracts any Bazel rules distributed in an npm package.
+load("@build_bazel_rules_nodejs//:index.bzl", "npm_install")
+npm_install(
+    # Name this npm so that Bazel Label references look like @npm//package
+    name = "npm",
+    package_json = "//:package.json",
+    package_lock_json = "//:package-lock.json",
+)
+
+# npm_installは、package.jsonかpackage-lock.jsonの更新を検知するとnpm_installを再実行する
+# その回では前回とパッケージのバージョンが異なるから（？）かLICENSEファイルが読み込めないというエラーになる
+# そこでパッケージのバージョンが更新されるからか、次回実行時は問題なく成功する
+# git cloneしたばかり、あるいはbazel cleanしてdist, bazel-outが存在しない場合は初回から問題なく成功する
