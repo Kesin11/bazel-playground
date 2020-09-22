@@ -13,10 +13,16 @@ My first bazel playground project
 - [x] jest
 
 ## ts_project(typescript)
-- [ ] install
-- [ ] tsc
-- [ ] jest(ts-jest)
+- [x] install
+- [x] tsc
+- [x] jest(ts-jest)
 
+## typescript_docker
+- [ ] build
+
+## typescript_monorepo
+- [ ] build
+- [ ] create each package.json
 
 # デバッグ時のメモ
 ## bazelコマンドの実行ログをファイルで見る
@@ -48,3 +54,10 @@ bazel aquery //:lib > log
 ```
   Outputs: [bazel-out/k8-fastbuild/bin/src/index.d.ts, bazel-out/k8-fastbuild/bin/src/index.js, bazel-out/k8-fastbuild/bin/src/int_list.d.ts, bazel-out/k8-fastbuild/bin/src/int_list.js, bazel-out/k8-fastbuild/bin/src/printer.d.ts, bazel-out/k8-fastbuild/bin/src/printer.js]
 ```
+
+# 参考リンク
+- https://bazelbuild.github.io/rules_nodejs/
+- https://github.com/bazelbuild/rules_nodejs/tree/stable/examples
+- https://github.com/bazelbuild/rules_nodejs/tree/stable/packages/typescript/test
+- https://dataform.co/blog/typescript-monorepo-with-bazel
+- https://github.com/OasisDigital/mobx-bazel-build
