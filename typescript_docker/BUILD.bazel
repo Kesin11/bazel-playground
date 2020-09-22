@@ -4,7 +4,9 @@
 load("@npm//@bazel/typescript:index.bzl", "ts_project")
 load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
 load(":jest.bzl", "jest_test")
-load("@io_bazel_rules_docker//container:container.bzl", "container_bundle")
+load("@io_bazel_rules_docker//container:container.bzl", "container_bundle", "container_image")
+load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
+load("@io_bazel_rules_docker//docker/package_managers:install_pkgs.bzl", "install_pkgs")
 
 ts_project(
   name = "lib",
@@ -29,36 +31,48 @@ jest_test(
   ],
 )
 
-# container_image(
-#     name = "base_image",
-#     base = "@nodejs_image_base//image",
-#     repository = "ts_bazel",
-# )
+#
+# Build container
+#
 
+# apt-getするイメージレイヤー
+download_pkgs(
+  name = "pkgs",
+  image_tar = "@nodejs_image_base//image",
+  packages = ["curl"],
+)
+install_pkgs(
+  name = "pkgs_image",
+  image_tar = "@nodejs_image_base//image",
+  installables_tar = ":pkgs.tar", # .tarを追加する必要がある
+  output_image_name = "pkgs_image",
+)
+
+# ビルド後の.jsを追加するイメージレイヤー
 nodejs_image(
   name = "nodejs_image",
   entry_point = ":src/index.ts",
-  # base = ":base_image",
+  base = ":pkgs_image",
   # npm deps will be put into their own layer
   data = [
     ":lib",
     "@npm//lodash"
   ],
-  stamp = True,
 )
 
+# create時間を正しくするためのstampを行うためだけにレイヤーを追加する
+container_image(
+    name = "release_image",
+    base = ":nodejs_image",
+    stamp = True,
+)
+
+# イメージ名とタグを付ける
 container_bundle(
-  name = "bundle",
+  name = "container",
   images = {
-    "ts_bazel:latest": ":nodejs_image",
-    "ts_bazel:newst": ":nodejs_image",
+    "ts_bazel:latest": ":release_image",
+    "ts_bazel:newst": ":release_image",
   },
 )
 
-# 一応これで望みの状態にはなったが、TAGがnameで固定されてしまっているのでいまいち
-# container_image(
-#     name = "release_image",
-#     base = ":nodejs_image",
-#     repository = "ts_bazel",
-#     stamp = True,
-# )

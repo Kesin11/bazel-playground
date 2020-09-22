@@ -19,7 +19,8 @@ My first bazel playground project
 
 ## typescript_docker
 - [ ] replace npm to yarn
-- [ ] build
+- [x] build
+- [x] add apt packages
 
 ## remote_cache
 - [ ] build
