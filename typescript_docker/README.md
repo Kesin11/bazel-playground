@@ -1,21 +1,17 @@
-# TypeScript using `ts_library`
+# Docker build with TypeScript
 
-see: https://bazelbuild.github.io/rules_nodejs/TypeScript.html#compiling-typescript-ts_library
-
-ts_libraryは `tsc` の薄いラッパーではなく、bazel向けにカスタムしたものらしい。
-
-ts_projectとの違いはドキュメントを参照。
+see: https://github.com/bazelbuild/rules_docker
 
 # USAGE
 ## build
-- Transpile .ts to .d.ts and .js
+- Transpile .ts to .js then build container includes them.
 
 ```
 npm run build
 ```
 
 ## test
-- Run jest with transpiled .js files.
+- Run jest with ts-jest
 
 ```
 npm run test

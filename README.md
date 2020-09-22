@@ -18,6 +18,7 @@ My first bazel playground project
 - [x] jest(ts-jest)
 
 ## typescript_docker
+- [ ] replace npm to yarn
 - [ ] build
 
 ## remote_cache
