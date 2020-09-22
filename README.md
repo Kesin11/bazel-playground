@@ -18,7 +18,7 @@ My first bazel playground project
 - [x] jest(ts-jest)
 
 ## typescript_docker
-- [ ] replace npm to yarn
+- [x] replace npm to yarn
 - [x] build
 - [x] add apt packages
 
@@ -59,6 +59,13 @@ bazel aquery //:lib > log
 
 ```
   Outputs: [bazel-out/k8-fastbuild/bin/src/index.d.ts, bazel-out/k8-fastbuild/bin/src/index.js, bazel-out/k8-fastbuild/bin/src/int_list.d.ts, bazel-out/k8-fastbuild/bin/src/int_list.js, bazel-out/k8-fastbuild/bin/src/printer.d.ts, bazel-out/k8-fastbuild/bin/src/printer.js]
+```
+
+## 成果物の依存関係をgraphvizで見る
+npmの依存を表示すると巨大になりがちなので `except @npm//...:*` で削除すると良い
+
+```
+bazel query --notool_deps --noimplicit_deps "deps(//:container) except @npm//...:*"  --output graph
 ```
 
 # 参考リンク
