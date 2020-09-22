@@ -20,6 +20,10 @@ My first bazel playground project
 ## typescript_docker
 - [ ] build
 
+## remote_cache
+- [ ] build
+- [ ] test
+
 ## typescript_monorepo
 - [ ] build
 - [ ] create each package.json
