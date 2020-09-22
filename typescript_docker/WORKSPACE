@@ -4,13 +4,11 @@
 # See https://docs.bazel.build/versions/master/build-ref.html#workspace
 workspace(
     # How this workspace would be referenced with absolute labels from another workspace
-    name = "typescript_ts_project",
+    name = "typescript_docker",
     # Map the @npm bazel workspace to the node_modules directory.
     # This lets Bazel use the same node_modules as other local tooling.
     managed_directories = {"@npm": ["node_modules"]},
 )
-# bazelがsandboxで使用するnode_modulesをローカルと共通にしている。docker volumeのマウントに近い
-# これによりbazelの中でnpm_installするとローカルのnode_modulesも更新される
 
 # Install the nodejs "bootstrap" package
 # This provides the basic tools for running and packaging nodejs programs in Bazel
@@ -31,7 +29,30 @@ npm_install(
     package_lock_json = "//:package-lock.json",
 )
 
-# npm_installは、package.jsonかpackage-lock.jsonの更新を検知するとnpm_installを再実行する
-# その回では前回とパッケージのバージョンが異なるから（？）かLICENSEファイルが読み込めないというエラーになる
-# そこでパッケージのバージョンが更新されるからか、次回実行時は問題なく成功する
-# git cloneしたばかり、あるいはbazel cleanしてdist, bazel-outが存在しない場合は初回から問題なく成功する
+#
+# For build container image
+# ref: https://github.com/bazelbuild/rules_docker#nodejs_image
+#
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "4521794f0fba2e20f3bf15846ab5e01d5332e587e9ce81629c7f96c793bb7036",
+    strip_prefix = "rules_docker-0.14.4",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.4/rules_docker-v0.14.4.tar.gz"],
+)
+# このあたりは内部で使うruleを読み込むため
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+container_repositories()
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+container_deps()
+load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+pip_deps()
+
+load(
+    "@io_bazel_rules_docker//nodejs:image.bzl",
+    _nodejs_image_repos = "repositories",
+)
+
+_nodejs_image_repos()

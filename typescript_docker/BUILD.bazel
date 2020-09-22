@@ -2,8 +2,9 @@
 # See https://docs.bazel.build/versions/master/build-ref.html#BUILD_files
 
 load("@npm//@bazel/typescript:index.bzl", "ts_project")
-load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
+load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
 load(":jest.bzl", "jest_test")
+load("@io_bazel_rules_docker//container:container.bzl", "container_bundle")
 
 ts_project(
   name = "lib",
@@ -18,18 +19,6 @@ ts_project(
   source_map = True,
 )
 
-# index.jsを実行してステータスコードが0かどうかチェックするだけ
-nodejs_test(
-  name = "index_test",
-  # ts_projectはsrc/index.tsからsrc/index.jsが生成されることが分かっている
-  # ':'を省略したとしてもsrc/index.ts -> src/index.jsと解釈されてjsが実行される
-  entry_point = ":src/index.ts",
-  data = [
-    "@npm//lodash",
-    ":lib"
-  ],
-)
-
 jest_test(
   name = "jest_test",
   srcs = glob(["__tests__/**/*.test.ts"]),
@@ -39,3 +28,37 @@ jest_test(
     "@npm//ts-jest",
   ],
 )
+
+# container_image(
+#     name = "base_image",
+#     base = "@nodejs_image_base//image",
+#     repository = "ts_bazel",
+# )
+
+nodejs_image(
+  name = "nodejs_image",
+  entry_point = ":src/index.ts",
+  # base = ":base_image",
+  # npm deps will be put into their own layer
+  data = [
+    ":lib",
+    "@npm//lodash"
+  ],
+  stamp = True,
+)
+
+container_bundle(
+  name = "bundle",
+  images = {
+    "ts_bazel:latest": ":nodejs_image",
+    "ts_bazel:newst": ":nodejs_image",
+  },
+)
+
+# 一応これで望みの状態にはなったが、TAGがnameで固定されてしまっているのでいまいち
+# container_image(
+#     name = "release_image",
+#     base = ":nodejs_image",
+#     repository = "ts_bazel",
+#     stamp = True,
+# )
