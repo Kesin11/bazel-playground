@@ -17,6 +17,13 @@ npm run build
 npm run test
 ```
 
+# buildで--platformsを指定している理由
+bazelのコンテナ作成はホストマシンの中でビルドしたファイルをそのままイメージレイヤーに追加するだけであり、コンテナの中で作業をするDockerfileとは異なる。そのため、macOSでbazelを実行した場合にmacOS向けのnodejsでビルドされた成果物がLinuxのコンテナに追加されてしまい、正しく動作しないという可能性がありえる。
+
+bazelにはクロスコンパイルを行う仕組みが存在するので、それを利用してmacOSで実行したとしてもLinux向けのビルドを行ってからコンテナにファイルを追加する。
+
+see: https://bazelbuild.github.io/rules_nodejs/install.html#toolchains
+
 # 他がWORKSPACE.bazelなのにここではWORKSPACEな理由
 nodejs_imageのビルド時に以下のエラーが出たのでWORKSPACEにリネームしたところエラーが解決したため。
 
