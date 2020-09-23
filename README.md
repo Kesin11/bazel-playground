@@ -23,16 +23,42 @@ My first bazel playground project
 - [x] add apt packages
 
 ## remote_cache
-- [ ] build
-- [ ] test
+- [x] GCS
+- [x] 本当に使えているのか検証
 
-## typescript_monorepo
-- [ ] build
-- [ ] create each package.json
+## Run on CI service
+- [ ] Github Actions
+
+# リモートキャッシュを有効にする
+see: https://docs.bazel.build/versions/master/remote-caching.html
+
+一番手軽に使えるのはおそらくGCSなので、ドキュメントに従い適当なバケットを新しく作成する。古いキャッシュを削除するためにライフサイクル機能が使えるとドキュメントに書いてあるので、N日後に自動削除されるような設定を入れておくとよい。
+
+バケットをread/writeできるように認証する必要がある。一例としてはサービスアカウントを作成して対象のバケットへの権限を付与し、サービスアカウントのjson鍵を作成しておく。
+
+準備が整ったらbazel実行時に以下のようなオプションを追加する。
+
+```
+bazel build --remote_cache=https://storage.googleapis.com/${BUCKET_NAME} --google_credentials=${PATH_TO_SERVICE_ACCOUNT_JSON} //...
+```
+
+実行時に毎回オプションを渡すのは大変なので、WORKSPACEと同じ階層に.bazelrcを用意してオプションを追加しておくとよい。
+パブリックなリポジトリのように自分のキャッシュ情報を公開したくない場合は、~/.bazelrcに書いたオプションも有効化されるのでそちらに置きましょう。
+
+ref: https://docs.bazel.build/versions/master/guide.html#bazelrc-the-bazel-configuration-file
+
+## リモートキャッシュが使われているかどうか確認する
+どこのキャッシュが使われたかどうかをログに出す方法はないっぽい？実行時にremote cacheにヒットしたかどうかは `--execution_log_json_file=path/to/log` でログを出力すると確認できる。ただし、ここでのremote cacheはローカルのディスクキャッシュも含まれる。
+
+bazelはデフォルトでディスクキャッシュが有効化されており、パスはおそらく~/.cache/baze-disk-cache（アンドキュメント）。ディスクキャッシュを無効化するには `--disk_cache=` パスを空白にする=無効化になる（アンドキュメント）  
+ref: https://github.com/bazelbuild/bazel/issues/5308
+
+ディスクキャッシュを無効化しつつ、`--remote_cache`を付けたときにもログでremote cacheがヒットしたと表示されていればリモートキャッシュを正しく使えていると判定して大丈夫なはず。
 
 # デバッグ時のメモ
 ## bazelコマンドの実行ログをファイルで見る
 bazelは以下のコマンドで出力されるファイルにログを全て出力するのでtail -fすると見られる
+
 ```
 bazel info command_log
 ```
