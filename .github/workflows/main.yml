@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       # Setup config for using GCS as bazel remote cache
       - name: Create GCP service account JSON
-        run: echo ${BAZEL_CACHE_SA_JSON} | base64 -D > ${HOME}/sa.json
+        run: echo ${BAZEL_CACHE_SA_JSON} | base64 --decode > ${HOME}/sa.json
         env:
           BAZEL_CACHE_SA_JSON: ${{ secrets.BAZEL_CACHE_SA_JSON }}
       - name: Create user own .bazerc for using remote cache
