@@ -11,6 +11,20 @@ jobs:
         working-directory: ts_project
     steps:
       - uses: actions/checkout@v2
+      # Setup config for using GCS as bazel remote cache
+      - name: Create GCP service account JSON
+        run: echo ${BAZEL_CACHE_SA_JSON} | base64 -D > ${HOME}/sa.json
+        env:
+          BAZEL_CACHE_SA_JSON: ${{ secrets.BAZEL_CACHE_SA_JSON }}
+      - name: Create user own .bazerc for using remote cache
+        run: |
+          echo "build --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" > ${HOME}/.bazelrc    
+          echo "test --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" > ${HOME}/.bazelrc
+          echo "run --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" > ${HOME}/.bazelrc
+        env:
+          BAZEL_CACHE_BUCKET: ${{ secrets.BAZEL_CACHE_BUCKET }}
+      - run: cat ${HOME}/.bazelrc
+      
       - name: Setup bazel
         run: npm ci
       - name: Build
