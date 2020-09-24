@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup bazel
-        run: npm ci
+        run: yarn install
         
       - name: Build
         run: npm run build
