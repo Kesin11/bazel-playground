@@ -27,7 +27,7 @@ My first bazel playground project
 - [x] 本当に使えているのか検証
 
 ## Run on CI service
-- [ ] Github Actions
+- [x] Github Actions
 
 # リモートキャッシュを有効にする
 see: https://docs.bazel.build/versions/master/remote-caching.html
