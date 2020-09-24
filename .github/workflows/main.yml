@@ -19,8 +19,8 @@ jobs:
       - name: Create user own .bazerc for using remote cache
         run: |
           echo "build --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" > ${HOME}/.bazelrc    
-          echo "test --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" > ${HOME}/.bazelrc
-          echo "run --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" > ${HOME}/.bazelrc
+          echo "test --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" >> ${HOME}/.bazelrc
+          echo "run --remote_cache=https://storage.googleapis.com/${BAZEL_CACHE_BUCKET} --google_credentials=${HOME}/sa.json" >> ${HOME}/.bazelrc
         env:
           BAZEL_CACHE_BUCKET: ${{ secrets.BAZEL_CACHE_BUCKET }}
       - run: cat ${HOME}/.bazelrc
