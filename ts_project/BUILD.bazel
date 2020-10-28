@@ -10,7 +10,6 @@ ts_project(
   srcs = glob(["src/**/*.ts"]),
   tsconfig = "tsconfig.json",
   deps = [
-    "@npm//lodash",
     "@npm//@types/lodash",
   ],
   # declarationやsouce_mapなどはtsconfig.jsonと一致しない場合はエラーになるので必ず合わせる
