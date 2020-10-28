@@ -34,7 +34,10 @@ jest_test(
   srcs = glob(["__tests__/**/*.test.ts"]),
   jest_config = "jest.config.js",
   deps = [
-    ":lib",
+    "src",
+    "tsconfig.json",
+    "@npm//@types/lodash",
+    "@npm//lodash",
     "@npm//ts-jest",
   ],
 )
