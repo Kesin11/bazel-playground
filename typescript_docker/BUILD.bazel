@@ -13,7 +13,6 @@ ts_project(
   srcs = glob(["src/**/*.ts"]),
   tsconfig = "tsconfig.json",
   deps = [
-    "@npm//lodash",
     "@npm//@types/lodash",
   ],
   # declarationやsouce_mapなどはtsconfig.jsonと一致しない場合はエラーになるので必ず合わせる
@@ -26,7 +25,10 @@ jest_test(
   srcs = glob(["__tests__/**/*.test.ts"]),
   jest_config = "jest.config.js",
   deps = [
-    ":lib",
+    "src",
+    "tsconfig.json",
+    "@npm//@types/lodash",
+    "@npm//lodash",
     "@npm//ts-jest",
   ],
 )
