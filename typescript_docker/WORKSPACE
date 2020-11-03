@@ -31,7 +31,7 @@ yarn_install(
 
 #
 # For build container image
-# ref: https://github.com/bazelbuild/rules_docker#nodejs_image
+# ref: https://github.com/bazelbuild/rules_nodejs/blob/700374ab91530702584ccb501113670878ec8047/examples/angular/WORKSPACE#L102-L123
 #
 http_archive(
     name = "io_bazel_rules_docker",
@@ -39,20 +39,19 @@ http_archive(
     strip_prefix = "rules_docker-0.14.4",
     urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.14.4/rules_docker-v0.14.4.tar.gz"],
 )
-# このあたりは内部で使うruleを読み込むため
-load(
-    "@io_bazel_rules_docker//repositories:repositories.bzl",
-    container_repositories = "repositories",
-)
+
+load("@io_bazel_rules_docker//repositories:repositories.bzl", container_repositories = "repositories")
+
 container_repositories()
+
 load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
 container_deps()
+
 load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+
 pip_deps()
 
-load(
-    "@io_bazel_rules_docker//nodejs:image.bzl",
-    _nodejs_image_repos = "repositories",
-)
+load("@io_bazel_rules_docker//nodejs:image.bzl", nodejs_image_repos = "repositories")
 
-_nodejs_image_repos()
+nodejs_image_repos()
