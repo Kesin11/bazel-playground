@@ -74,7 +74,7 @@ container_bundle(
   name = "container",
   images = {
     "ts_bazel:latest": ":release_image",
-    "ts_bazel:newst": ":release_image",
+    "ts_bazel:next": ":release_image",
   },
 )
 
