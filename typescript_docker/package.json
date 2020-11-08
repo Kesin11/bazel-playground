@@ -15,7 +15,8 @@
         "build": "bazel run --platforms=@build_bazel_rules_nodejs//toolchains/node:linux_amd64 //:container",
         "test": "bazel test //...",
         "test:watch": "ibazel test //...",
-        "test:debug": "bazel test -s --verbose_failures --sandbox_debug //..."
+        "test:debug": "bazel test -s --verbose_failures --sandbox_debug //...",
+        "clean": "bazel clean"
     },
     "dependencies": {
         "lodash": "^4.17.20"
