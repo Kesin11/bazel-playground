@@ -1,5 +1,7 @@
 # bazel-playground
-My first bazel playground project
+Zennで公開したBazel解説の記事で使用したサンプルコードです。
+
+https://zenn.dev/kesin11/books/c86010deb5b8008f394f
 
 ## javascript
 - [x] install
