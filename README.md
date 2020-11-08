@@ -50,7 +50,7 @@ ref: https://docs.bazel.build/versions/master/guide.html#bazelrc-the-bazel-confi
 ## リモートキャッシュが使われているかどうか確認する
 どこのキャッシュが使われたかどうかをログに出す方法はないっぽい？実行時にremote cacheにヒットしたかどうかは `--execution_log_json_file=path/to/log` でログを出力すると確認できる。ただし、ここでのremote cacheはローカルのディスクキャッシュも含まれる。
 
-bazelはデフォルトでディスクキャッシュが有効化されており、パスはおそらく~/.cache/baze-disk-cache（アンドキュメント）。ディスクキャッシュを無効化するには `--disk_cache=` パスを空白にする=無効化になる（アンドキュメント）  
+bazelはデフォルトでディスクキャッシュが有効化されており、`npx @bazel/create`でプロジェクトを作成した場合は自動的に用意される.bazelrcによって~/.cache/baze-disk-cacheが指定されている。ディスクキャッシュを無効化するには `--disk_cache=` パスを空白にする=無効化になる（アンドキュメント）  
 ref: https://github.com/bazelbuild/bazel/issues/5308
 
 ディスクキャッシュを無効化しつつ、`--remote_cache`を付けたときにもログでremote cacheがヒットしたと表示されていればリモートキャッシュを正しく使えていると判定して大丈夫なはず。
