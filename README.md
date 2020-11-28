@@ -1,5 +1,5 @@
 # bazel-playground
-[Bazelの解説（TS, Dockerイメージ、リモートキャッシュ）](https://zenn.dev/kesin11/books/c86010deb5b8008f394f) のサンプルコード
+[Bazelの解説（TS, Dockerイメージ、リモートキャッシュ）](https://zenn.dev/kesin11/books/c86010deb5b8008f394f) の記事で使用したサンプルコードです。
 
 # USAGE
 各ディレクトリの中で以下のコマンドを実行するとbazelのビルドを体験できます。
