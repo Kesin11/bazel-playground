@@ -3,9 +3,9 @@
     "version": "0.1.0",
     "private": true,
     "devDependencies": {
-        "@bazel/bazelisk": "latest",
-        "@bazel/buildifier": "latest",
-        "@bazel/ibazel": "latest",
+        "@bazel/bazelisk": "^1.7.3",
+        "@bazel/buildifier": "^3.5.0",
+        "@bazel/ibazel": "^0.14.0",
         "eslint": "^7.9.0",
         "eslint-plugin-jest": "^24.0.2",
         "jest": "^26.4.2"

@@ -1,6 +1,16 @@
 # bazel-playground
-My first bazel playground project
+[Bazelの解説（TS, Dockerイメージ、リモートキャッシュ）](https://zenn.dev/kesin11/books/c86010deb5b8008f394f) のサンプルコード
 
+# USAGE
+各ディレクトリの中で以下のコマンドを実行するとbazelのビルドを体験できます。
+
+```
+npm ci
+npm run build
+npm run test
+```
+
+# TODO
 ## javascript
 - [x] install
 - [x] simple test
@@ -29,7 +39,8 @@ My first bazel playground project
 ## Run on CI service
 - [x] Github Actions
 
-# リモートキャッシュを有効にする
+# Tips
+## リモートキャッシュを有効にする
 see: https://docs.bazel.build/versions/master/remote-caching.html
 
 一番手軽に使えるのはおそらくGCSなので、ドキュメントに従い適当なバケットを新しく作成する。古いキャッシュを削除するためにライフサイクル機能が使えるとドキュメントに書いてあるので、N日後に自動削除されるような設定を入れておくとよい。
@@ -55,15 +66,15 @@ ref: https://github.com/bazelbuild/bazel/issues/5308
 
 ディスクキャッシュを無効化しつつ、`--remote_cache`を付けたときにもログでremote cacheがヒットしたと表示されていればリモートキャッシュを正しく使えていると判定して大丈夫なはず。
 
-# デバッグ時のメモ
-## bazelコマンドの実行ログをファイルで見る
+## デバッグ時のメモ
+### bazelコマンドの実行ログをファイルで見る
 bazelは以下のコマンドで出力されるファイルにログを全て出力するのでtail -fすると見られる
 
 ```
 bazel info command_log
 ```
 
-## 実際に実行されているコマンド、sandboxの中をあとから見る
+### 実際に実行されているコマンド、sandboxの中をあとから見る
 - -s: 実行されているサブコマンドを表示
 - --verbose_failures: 失敗時のログを多く表示？
 - --sandbox_debug: 通常は実行後に削除されるsandboxディレクトリを保持する
@@ -74,7 +85,7 @@ jestに渡している引数がログに表示され、ログに表示されるs
 bazel test -s --verbose_failures --sandbox_debug //...
 ```
 
-## BUILD.bazelでの各ruleのdepsやoutputsを見る
+### BUILD.bazelでの各ruleのdepsやoutputsを見る
 前段でビルドされた成果物を次に渡す場合など、`:lib`のように指定するが、その中に実際に含まれているファイルを確認する。
 
 ```
@@ -87,7 +98,7 @@ bazel aquery //:lib > log
   Outputs: [bazel-out/k8-fastbuild/bin/src/index.d.ts, bazel-out/k8-fastbuild/bin/src/index.js, bazel-out/k8-fastbuild/bin/src/int_list.d.ts, bazel-out/k8-fastbuild/bin/src/int_list.js, bazel-out/k8-fastbuild/bin/src/printer.d.ts, bazel-out/k8-fastbuild/bin/src/printer.js]
 ```
 
-## 成果物の依存関係をgraphvizで見る
+### 成果物の依存関係をgraphvizで見る
 npmの依存を表示すると巨大になりがちなので `except @npm//...:*` で削除すると良い
 
 ```
